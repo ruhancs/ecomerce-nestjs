@@ -23,6 +23,15 @@ export class UserService {
     });
   }
 
+  async getUserIncludeAddress(id): Promise<UserEntity> {
+    return this.userRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['addresses'],
+    });
+  }
+
   async getAllUsers(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }

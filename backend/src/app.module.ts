@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { StateModule } from './state/state.module';
+import { CityModule } from './city/city.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -15,10 +18,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: process.env.DB_PASSWORD,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
-      synchronize: true, //cria automaticamente o banco de dados da api
-      entities: [`${__dirname}/**/*.entity{.js,.ts}`],
+      // synchronize: true, //cria automaticamente as tabelas
+      entities: [`${__dirname}/**/*.entity{.js,.ts}`], // faz as migraçoes de todas entities
+      migrations: [`${__dirname}/migrations/{.ts,*.js}`], // pegar os arquivos de migraçoes
+      migrationsRun: true,
     }),
     UserModule,
+    StateModule,
+    CityModule,
+    AddressModule,
   ],
   controllers: [],
   providers: [],

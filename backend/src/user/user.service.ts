@@ -55,4 +55,29 @@ export class UserService {
 
     return user;
   }
+
+  async findUserByEmail(email: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    return user;
+  }
+
+  async login(email: string, password: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+        password,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Email or password is wrong');
+    }
+
+    return user;
+  }
 }

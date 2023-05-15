@@ -4,17 +4,19 @@ import { AddressService } from './address.service';
 import { AddressEntity } from './entity/address.entity';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserType } from 'src/user/enum/userTypes.enum';
+import { UserId } from 'src/decorators/user.decorator';
 
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Roles(UserType.User)
-  @Post('/:userId')
+  @Post()
   async createAddress(
     @Body() createAddressDto: CreateAddressDto,
-    @Param('userId') userId: number,
+    @UserId() userId: number,
   ): Promise<AddressEntity> {
+    console.log(userId);
     return this.addressService.createAddress(createAddressDto, userId);
   }
 }

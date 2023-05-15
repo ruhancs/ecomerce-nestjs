@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ICreateUserDto } from './dtos/createUserDto';
@@ -13,6 +13,12 @@ export class UserService {
   ) {}
 
   async createUser(creatUserDto: ICreateUserDto): Promise<UserEntity> {
+    const emailExist = await this.findUserByEmail(creatUserDto.email);
+
+    if (emailExist) {
+      throw new ConflictException('Email is already registered');
+    }
+
     const salt = 10;
     const passwordhashed = await hash(creatUserDto.password, salt);
 

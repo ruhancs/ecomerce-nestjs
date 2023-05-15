@@ -13,7 +13,7 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const { Authorization } = context.switchToHttp().getRequest().headers; // header com token
+    const { authorization } = context.switchToHttp().getRequest().headers; // header com token
 
     const requiredRoles = this.reflector.getAllAndOverride<UserType[]>(
       ROLES_KEY,
@@ -25,7 +25,7 @@ export class RolesGuard implements CanActivate {
     }
 
     const tokenPayload: TokenPayload | undefined = await this.jwtService
-      .verifyAsync(Authorization, {
+      .verifyAsync(authorization, {
         secret: process.env.JWT_SECRET_KEY,
       })
       .catch(() => undefined);

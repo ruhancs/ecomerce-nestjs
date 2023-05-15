@@ -1,4 +1,4 @@
-import { TokenPayload } from 'src/auth/dtos/TokenPayload.dto';
+import { TokenPayload } from '../../auth/dtos/TokenPayload.dto';
 
 export const payloadConversor = (token: string): TokenPayload | undefined => {
   const dataToken = token.split('.');

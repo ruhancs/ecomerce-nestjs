@@ -2,9 +2,9 @@ import { Body, Controller, Param, Post } from '@nestjs/common';
 import { CreateAddressDto } from './dtos/createAddress.dto';
 import { AddressService } from './address.service';
 import { AddressEntity } from './entity/address.entity';
-import { Roles } from 'src/decorators/roles.decorator';
-import { UserType } from 'src/user/enum/userTypes.enum';
-import { UserId } from 'src/decorators/user.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from '../user/enum/userTypes.enum';
+import { UserId } from '../decorators/user.decorator';
 
 @Controller('address')
 export class AddressController {

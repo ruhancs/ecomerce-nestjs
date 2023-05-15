@@ -53,7 +53,7 @@ describe('UserService', () => {
     expect(service.createUser(creatUserMock)).rejects.toThrowError();
   });
 
-  it('should return an error if user email already registered', async () => {
+  it('should register one user', async () => {
     jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
 
     const user = await service.createUser(creatUserMock);

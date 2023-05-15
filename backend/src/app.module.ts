@@ -10,7 +10,6 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guards';
 import { JwtModule } from '@nestjs/jwt';
-import { TestService } from './test/test.service';
 
 @Module({
   imports: [
@@ -43,7 +42,6 @@ import { TestService } from './test/test.service';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    TestService,
   ],
 })
 export class AppModule {}

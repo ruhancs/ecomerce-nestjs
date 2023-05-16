@@ -1,4 +1,4 @@
-import { ICreateUserDto } from 'src/user/dtos/createUserDto';
+import { ICreateUserDto } from '../../dtos/createUserDto';
 
 export const creatUserMock: ICreateUserDto = {
   cpf: '1234345',

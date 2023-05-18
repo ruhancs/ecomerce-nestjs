@@ -5,6 +5,8 @@ import { UserEntity } from './entity/user.entity';
 import { ResponseUserDto } from './dtos/responseUser.dto';
 import { UpdatePasswordDto } from './dtos/updatePasswordDto';
 import { UserId } from '../decorators/user.decorator';
+import { Roles } from 'src/decorators/roles.decorator';
+import { UserType } from './enum/userTypes.enum';
 
 @Controller('user')
 export class UserController {
@@ -14,6 +16,7 @@ export class UserController {
     return this.userService.createUser(createUserDto);
   }
 
+  @Roles(UserType.Admin)
   @Get()
   async getAllUsers(): Promise<ResponseUserDto[]> {
     return (await this.userService.getAllUsers()).map(
@@ -21,6 +24,7 @@ export class UserController {
     );
   }
 
+  @Roles(UserType.Admin)
   @Get('/:userId')
   async getUserIncludeAddress(
     @Param('userId') userId: number,
@@ -30,6 +34,7 @@ export class UserController {
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Patch('/update-password')
   async updatePassword(
     @UserId() id: number,

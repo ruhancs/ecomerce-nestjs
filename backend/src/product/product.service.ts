@@ -9,6 +9,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { CreateProductDto } from './dtos/createProduct.dto';
 import { CategoryService } from 'src/category/category.service';
+import { UpdateProductDto } from './dtos/updateProductDto';
 
 @Injectable()
 export class ProductService {
@@ -69,6 +70,18 @@ export class ProductService {
     }
 
     return product;
+  }
+
+  async updateProduct(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<ProductEntity> {
+    const product = await this.findProductById(id);
+
+    return this.productRepository.save({
+      ...product,
+      ...updateProductDto,
+    });
   }
 
   async removeProduct(id: number): Promise<DeleteResult> {

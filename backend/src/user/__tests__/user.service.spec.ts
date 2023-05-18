@@ -5,6 +5,7 @@ import { UserEntity } from '../entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { userEntityMock } from './mocks/user.mock';
 import { creatUserMock } from './mocks/createUser.mock';
+import { updatePasswordMock } from './mocks/updatePassword.mock';
 
 describe('UserService', () => {
   let service: UserService;
@@ -60,4 +61,13 @@ describe('UserService', () => {
 
     expect(user).toEqual(userEntityMock);
   });
+
+  // it('should update user password', async () => {
+  //   const user = await service.updatePassword(
+  //     userEntityMock.id,
+  //     updatePasswordMock,
+  //   );
+
+  //   expect(user).toEqual(userEntityMock);
+  // });
 });

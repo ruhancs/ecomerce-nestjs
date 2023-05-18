@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -7,7 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ICreateUserDto } from './dtos/createUserDto';
 import { UserEntity } from './entity/user.entity';
-import { hash } from 'bcrypt';
+import { UpdatePasswordDto } from './dtos/updatePasswordDto';
+import { compare, hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -16,6 +18,10 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
+  async hashPassword(password: string, salt = 10): Promise<string> {
+    return hash(password, salt);
+  }
+
   async createUser(creatUserDto: ICreateUserDto): Promise<UserEntity> {
     const emailExist = await this.findUserByEmail(creatUserDto.email);
 
@@ -23,8 +29,7 @@ export class UserService {
       throw new ConflictException('Email is already registered');
     }
 
-    const salt = 10;
-    const passwordhashed = await hash(creatUserDto.password, salt);
+    const passwordhashed = await this.hashPassword(creatUserDto.password);
 
     return this.userRepository.save({
       ...creatUserDto,
@@ -74,6 +79,29 @@ export class UserService {
     });
 
     return user;
+  }
+
+  async updatePassword(
+    userId: number,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<UserEntity> {
+    const user = await this.findUserById(userId);
+
+    const checkPassword = await compare(
+      updatePasswordDto.password,
+      user.password,
+    );
+
+    if (!checkPassword) {
+      throw new BadRequestException('Password is wrong');
+    }
+
+    const newPassword = await this.hashPassword(updatePasswordDto.newPassword);
+
+    return this.userRepository.save({
+      ...user,
+      password: newPassword,
+    });
   }
 
   async login(email: string, password: string): Promise<UserEntity> {

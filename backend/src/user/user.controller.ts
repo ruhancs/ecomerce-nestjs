@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ICreateUserDto } from './dtos/createUserDto';
 import { UserService } from './user.service';
 import { UserEntity } from './entity/user.entity';
 import { ResponseUserDto } from './dtos/responseUser.dto';
+import { UpdatePasswordDto } from './dtos/updatePasswordDto';
+import { UserId } from '../decorators/user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -26,5 +28,13 @@ export class UserController {
     return new ResponseUserDto(
       await this.userService.getUserIncludeAddress(userId),
     );
+  }
+
+  @Patch('/update-password')
+  async updatePassword(
+    @UserId() id: number,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<UserEntity> {
+    return this.userService.updatePassword(id, updatePasswordDto);
   }
 }

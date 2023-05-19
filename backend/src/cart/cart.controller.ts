@@ -1,4 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CartEntity } from './entities/cart.entity';
 import { InsertCartDto } from './dtos/insertCart.dto';
 import { CartService } from './cart.service';
@@ -20,5 +28,32 @@ export class CartController {
     return new ResponseCartDto(
       await this.cartService.inserInCart(userId, insercartDto),
     );
+  }
+
+  @Patch()
+  async updateProductCart(
+    @UserId() UserId,
+    @Body() updateCartDto: InsertCartDto,
+  ): Promise<ResponseCartDto> {
+    return new ResponseCartDto(
+      await this.cartService.updateProductCart(updateCartDto, UserId),
+    );
+  }
+
+  @Get()
+  async getCart(@UserId() userId): Promise<ResponseCartDto> {
+    return new ResponseCartDto(
+      await this.cartService.findUserCart(userId, true),
+    );
+  }
+
+  @Delete()
+  async clearCart(@UserId() userId) {
+    return this.cartService.clearCart(userId);
+  }
+
+  @Delete('/product/:productId')
+  async removeCartProduct(@UserId() userId, @Param('productId') productId) {
+    return this.cartService.removeCartProduct(userId, productId);
   }
 }
